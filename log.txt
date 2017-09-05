@@ -1,3 +1,2 @@
-Sat Aug 12 22:14:56 CST 2017  Info: Main : LogInit!
-Sat Aug 12 22:14:56 CST 2017  Info: SocketBeControlled.ControlledClient : |NORMAL@MSG|_|ONLINE@SUCCESS|_@@|END@FLAG|@@
-Sat Aug 12 22:15:40 CST 2017  Info: SocketBeControlled.ControlledClient : HOLE SIGN ip = 117.32.216.83 , port = 16922
+Wed Sep 06 00:35:00 CST 2017  Info: Main : LogInit!
+Wed Sep 06 00:35:01 CST 2017  Info: SocketBeControlled.ControlledClient : |ONLINE@SUCCESS|_@@|END@FLAG|@@

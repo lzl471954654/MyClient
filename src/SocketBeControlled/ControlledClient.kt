@@ -5,7 +5,7 @@ import Utils.LogUtils
 import java.io.*
 import java.net.*
 
-class ControlledClient(val ipAddress:String,val port:Int,val myId:String) {
+class ControlledClient(val ipAddress:String,val port:Int,val username:String,val password:String) {
     val reader: BufferedReader by lazy {
         BufferedReader(InputStreamReader(socket.getInputStream()))
     }
@@ -23,17 +23,24 @@ class ControlledClient(val ipAddress:String,val port:Int,val myId:String) {
 
     fun clientRun(){
         try{
-            socket = Socket()
-            socket.reuseAddress = true
-            socket.connect(InetSocketAddress(ipAddress,port))
-            writer.println("${ServerProtocol.ONLINE}_${myId}_${ServerProtocol.BE_CONTROLLED}_$END")
+            socket = Socket(ipAddress,port)
+            writer.println("${ServerProtocol.ONLINE}_${username}_${password}_$END")
             writer.flush()
             val onlineResult = readStringData()
             logInfo(onlineResult)
-            while (loop){
-
-                var instructions = readStringData()
-                dealInstructions(instructions)
+            if(onlineResult.startsWith(ServerProtocol.ONLINE_SUCCESS)&&onlineResult.endsWith(ServerProtocol.END_FLAG))
+            {
+                while (loop){
+                    var instructions = readStringData()
+                    println("From Server: $instructions")
+                    var data = readLine()
+                    if(data==null){
+                        println("Exit")
+                        break
+                    }
+                    writer.println(data+"_"+ServerProtocol.END_FLAG)
+                    writer.flush()
+                }
             }
         }catch (e:IOException){
             e.printStackTrace()
@@ -44,10 +51,6 @@ class ControlledClient(val ipAddress:String,val port:Int,val myId:String) {
             LogUtils.logException(classTag,""+e.message)
         }
         finally {
-            writer.println("${ServerProtocol.OFFLINE}_${myId}_${ServerProtocol.BE_CONTROLLED}_${ServerProtocol.END_FLAG}")
-            writer.flush()
-            reader.close()
-            writer.close()
             socket.close()
         }
     }
